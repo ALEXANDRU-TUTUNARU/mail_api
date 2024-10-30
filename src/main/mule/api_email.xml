@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd">
+	<email:smtp-config name="Email_SMTP" doc:name="Email SMTP" doc:id="47b7f1b4-aea0-478e-a140-d71b6639b17d" >
+		<email:smtp-connection host="smtp.office365.com" port="587" user="a58379@ualg.pt" password="!6!PDk#2" >
+			<email:properties >
+				<email:property key="mail.smtp.starttls.enable" value="true" />
+			</email:properties>
+		</email:smtp-connection>
+	</email:smtp-config>
+	<flow name="api_emailFlow" doc:id="3c9eb443-bcbe-4719-a33f-58a34fcdb32e" >
+		<scheduler doc:name="Scheduler" doc:id="564dfef0-a363-4fa3-8155-f807cafb8f8b" >
+			<scheduling-strategy >
+				<fixed-frequency />
+			</scheduling-strategy>
+		</scheduler>
+		<file:read doc:name="Read" doc:id="10903bfc-11bf-4ffa-9625-b4767e8633fa" path="C:\Users\admin\OneDrive - Universidade do Algarve\CeSTP - TECNOLOGIAS INFORMATICAS\Tecnologias Emergentes\ficheiro.csv"/>
+		<email:send doc:name="Send" doc:id="31256852-b088-4eea-a8b7-a971734880b2" config-ref="Email_SMTP" fromAddress="a58379@ualg.pt" subject="ss">
+			<email:to-addresses >
+				<email:to-address value="a89983@ualg.pt" />
+			</email:to-addresses>
+			<email:body contentType="text/csv" >
+				<email:content ><![CDATA[payload]]></email:content>
+			</email:body>
+			<email:attachments ><![CDATA[#[{
+	"name":payload
+
+}]]]></email:attachments>
+		</email:send>
+	</flow>
+</mule>
